@@ -7,7 +7,7 @@ public class App extends WebTest
 
 		WebTest webtest = new WebTest();
 		webtest.StartDriver("Edge");
-		driver.get("https://www.google.com");
+		driver.get("https://www.bolttech.co.th/en/ascend/device-protection?utm_source=ascend");
 		
 		driver.quit();
 	}
