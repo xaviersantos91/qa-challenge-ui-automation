@@ -8,6 +8,8 @@ import org.openqa.selenium.bidi.browsingcontext.Locator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Random;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,9 +31,10 @@ public class App extends DriverManager{
 
     @Test
     public void UIAutomation() {
-    	driver.get("https://www.bolttech.co.th/en/ascend/device-protection?utm_source=ascend");
+       	driver.get("https://www.bolttech.co.th/en/ascend/device-protection?utm_source=ascend");
 		GenericActions.CloseCookies(driver);
 		MainPage.isPriceDropDownVisible(driver);
+		MainPage.PickRandomPrice(driver);
     }
 
     @After
