@@ -54,34 +54,12 @@ public class MainPage extends DriverManager
 	@Given("I wait for the price picker to show up")
 	public static void isPriceDropDownVisible() {
 		
-		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-device-protection-form"))));
-        
-		WebElement root1 = driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-device-protection-form"));
-                
-		wait.until(ExpectedConditions.visibilityOf(root1)).getShadowRoot();
-                
-		WebElement root2 = root1.getShadowRoot().findElement(By.cssSelector("#DeviceProtectionForm > edi-device-detection"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root2)).getShadowRoot();
-		
-		dropdown = root2.getShadowRoot().findElement(By.cssSelector("style + .container > div > div.container__price > edi-dropdown"));
-        				//.findElement(By.cssSelector(".container > input#planTypeInput"))
-        				
-		wait.until(ExpectedConditions.visibilityOf(dropdown)).getShadowRoot();
-		/*
-		WebElement root4 = dropdown.getShadowRoot().findElement(By.cssSelector("fieldset"));
-				
-		wait.until(ExpectedConditions.visibilityOf(root4));
-			    
-	    root4.click();
-	    */
+		dropdown = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_dropdown");		
 						
 	    if(dropdown.isDisplayed())
 	    	assertTrue("Drop-down list of price ranges must be visible - The drop-down is visible", true);
 	    else
 	    	fail("Drop-down list of price ranges must be visible - The drop-down is NOT visible");
-	    	//assertTrue("Drop-down list of price ranges must be visible - The drop-down is NOT visible", false); 
-    	
 	}
 	
 	
@@ -102,16 +80,14 @@ public class MainPage extends DriverManager
 		    
 		    value_selected = dropdown_options.get(randomNumber).getText();
 		    
+		    WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_future_validations");
+		    WebElement root5 = shadow_root.getShadowRoot().findElement(By.cssSelector("div > edi-cta[disabled='false']"));
+		    
 		    dropdown_options.get(randomNumber).click();
 		    
-		    try
-			{
-				Thread.sleep(Duration.ofSeconds(2));
-			} catch (InterruptedException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		    String loading = root5.getAttribute("disabled");
+		    if (loading.equals("true"))
+		    	wait.until(ExpectedConditions.visibilityOf(root5));
 	}
 	
 	@When("The price picker shows I choose a {string} from it")
@@ -138,17 +114,13 @@ public class MainPage extends DriverManager
 		    	break;
 			i++;
 		}
-	    
+	    WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_future_validations");
+	    WebElement root5 = shadow_root.getShadowRoot().findElement(By.cssSelector("div > edi-cta[disabled='false']"));
 	    dropdown_options.get(i).click();
-	    	    
-	    try
-		{
-			Thread.sleep(Duration.ofSeconds(2));
-		} catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    
+	    String loading = root5.getAttribute("disabled");
+	    if (loading.equals("true"))
+	    	wait.until(ExpectedConditions.visibilityOf(root5));
 	}
 	
 	@Then("I close the browser and driver")
@@ -166,42 +138,21 @@ public class MainPage extends DriverManager
 			assertTrue("O valor escolhido -> " + value_selected + " deve ser igual ao valor presente -> " + dropdown_text, true);
 		else
 			fail("O valor escolhido -> " + value_selected + " deve ser igual ao valor presente -> " + dropdown_text);
-				
+	
+		
 	}
 	
 	@Then("I select the product")
 	public static void SelectProduct() {
 		
-		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-card-slider"))));
-        
-		WebElement root1 = driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-card-slider"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root1)).getShadowRoot();
-        
-		WebElement root2 = root1.findElement(By.tagName("edi-card-vertical"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root2)).getShadowRoot();
-        
-		WebElement root3 = root2.getShadowRoot().findElement(By.cssSelector("div.edi-card-vertical-url > edi-card#card"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root3)).getShadowRoot();
-        
-		WebElement root4 = root3.findElement(By.tagName("edi-card-vertical-content")); 
-		
-		wait.until(ExpectedConditions.visibilityOf(root4)).getShadowRoot();
-        
-		WebElement root5 = root4.getShadowRoot().findElement(By.cssSelector("div > edi-cta"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root5)).getShadowRoot();
-        
-		WebElement root6 = root5.getShadowRoot().findElement(By.cssSelector("div > a"));
-		
-		root6.click();
+		WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_select_product");	
+		shadow_root.click();
 		
 	}
 	
 	@And("I capture the values in this page that will be used in future validations")
 	public static void CaptureUtmSource() {
+		
 		String url = driver.getCurrentUrl();
         String[] parts = url.split("\\?");
 
@@ -212,39 +163,19 @@ public class MainPage extends DriverManager
             }
         }
         
+        WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_future_validations");
+        
         //product name
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-card-slider"))));
-        
-		WebElement root1 = driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-card-slider"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root1)).getShadowRoot();
-        
-		WebElement root2 = root1.findElement(By.tagName("edi-card-vertical"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root2)).getShadowRoot();
-        
-		WebElement root3 = root2.getShadowRoot().findElement(By.cssSelector("div.edi-card-vertical-url > edi-card#card"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root3)).getShadowRoot();
-        
-		WebElement root4 = root3.findElement(By.tagName("edi-card-vertical-content")); 		
-		
-		wait.until(ExpectedConditions.visibilityOf(root4)).getShadowRoot();
-        
-		WebElement product_name_element = root4.getShadowRoot().findElement(By.cssSelector("div > header > div > p.card-title"));
-		
+		WebElement product_name_element = shadow_root.getShadowRoot().findElement(By.cssSelector("div > header > div > p.card-title"));
 		product_name_saved = product_name_element.getText();
 		
 		//current price
-		WebElement root5 = root4.getShadowRoot().findElement(By.cssSelector("div > div.price-container > h3.edi-card-vertical__price > edi-counter"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root5)).getShadowRoot();
-		
+		WebElement root5 = shadow_root.getShadowRoot().findElement(By.cssSelector("div > div.price-container > h3.edi-card-vertical__price > edi-counter"));
+		wait.until(ExpectedConditions.visibilityOf(root5)).getShadowRoot();	
+				
 		WebElement current_price_element_1 = root5.getShadowRoot().findElement(By.cssSelector("span#counter > span.counter-val"));
 		WebElement current_price_element_2 = root5.findElement(By.cssSelector("span[slot='post-counter']"));
-		
 		current_price_saved = current_price_element_1.getText()+current_price_element_2.getText();
-		int a = 0;
-        
+		        
 	}
 }

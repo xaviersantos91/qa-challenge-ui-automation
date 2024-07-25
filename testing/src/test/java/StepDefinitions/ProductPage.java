@@ -41,25 +41,9 @@ public class ProductPage extends DriverManager
 	@And("I wait for the page to load completly")
 	public static void WaitForPageToLoadCompletly() {
 		
-		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("edi-checkout"))));
-        
-		WebElement root1 = driver.findElement(By.cssSelector("edi-checkout"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root1)).getShadowRoot();
-        
-		WebElement root2 = root1.getShadowRoot().findElement(By.cssSelector("div.frank-container > neon-animated-pages"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root2)).getShadowRoot();
-        
-		WebElement root3 = root2.findElement(By.cssSelector("neon-animatable > edi-product-summary"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root3)).getShadowRoot();
-        
-		WebElement root4 = root3.getShadowRoot().findElement(By.cssSelector("#productSummary > .product-summary-box > edi-loading"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root4));
-        
-		WebElement root5 = root4.findElement(By.cssSelector("div > div.price > div.final-price-wrapper > p"));
+		WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("card_details");
+		        
+		WebElement root5 = shadow_root.findElement(By.cssSelector("div > div.price > div.final-price-wrapper > p"));
 		
 		try {
 			wait.until(ExpectedConditions.visibilityOf(root5));
@@ -103,27 +87,11 @@ public class ProductPage extends DriverManager
 	
 	@Then("I validate that the current price and product name are in accordance with the ones shown on the previous page")
 	public static void ValidateCurrentPriceAndProductName() {
-		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("edi-checkout"))));
-        
-		WebElement root1 = driver.findElement(By.cssSelector("edi-checkout"));
 		
-		wait.until(ExpectedConditions.visibilityOf(root1)).getShadowRoot();
-        
-		WebElement root2 = root1.getShadowRoot().findElement(By.cssSelector("div.frank-container > neon-animated-pages"));
+		WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("card_details");
 		
-		wait.until(ExpectedConditions.visibilityOf(root2)).getShadowRoot();
-		
-		WebElement root3 = root2.findElement(By.cssSelector("neon-animatable > edi-product-summary"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root3)).getShadowRoot();
-        
-		WebElement root4 = root3.getShadowRoot().findElement(By.cssSelector("#productSummary > .product-summary-box > edi-loading"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root4));
-		
-		String product_name = root4.findElement(By.cssSelector("div > p.title")).getText();
-		
-		String current_price = root4.findElement(By.cssSelector("div > div.price > div.final-price-wrapper > p.final-price")).getText();
+		String product_name = shadow_root.findElement(By.cssSelector("div > p.title")).getText();
+		String current_price = shadow_root.findElement(By.cssSelector("div > div.price > div.final-price-wrapper > p.final-price")).getText();
 			
 		if(MainPage.current_price_saved.equals(current_price))
 			assertTrue("The current price in the previous page was " + MainPage.current_price_saved + " and in the Checkout page card is equal -> " + current_price, true);
@@ -140,26 +108,10 @@ public class ProductPage extends DriverManager
 	@And("I validate the {string}, the Contract Start Date and {string}")
 	public static void ValidateProviderContractStartDateAndContractRenewal(String provider, String contract_renewal) {
 		
-		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("edi-checkout"))));
-        
-		WebElement root1 = driver.findElement(By.cssSelector("edi-checkout"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root1)).getShadowRoot();
-        
-		WebElement root2 = root1.getShadowRoot().findElement(By.cssSelector("div.frank-container > neon-animated-pages"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root2)).getShadowRoot();
-		
-		WebElement root3 = root2.findElement(By.cssSelector("neon-animatable > edi-product-summary"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root3)).getShadowRoot();
-        
-		WebElement root4 = root3.getShadowRoot().findElement(By.cssSelector("#productSummary > .product-summary-box > edi-loading"));
-		
-		wait.until(ExpectedConditions.visibilityOf(root4));
+		WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("card_details");
 		
 		//validation of the provider
-		String provider_retrieved = root4.findElement(By.cssSelector("#providerName")).getText();
+		String provider_retrieved = shadow_root.findElement(By.cssSelector("#providerName")).getText();
 		
 		if(provider_retrieved.equals(provider))
 			assertTrue("The Provider name must always be " + provider + " and in the Checkout page card is equal -> " + provider_retrieved, true);
@@ -167,7 +119,7 @@ public class ProductPage extends DriverManager
 			fail("The Provider name must always be " + provider + " and in the Checkout page card is equal -> " + provider_retrieved);
 		
 		//validation of the contract renewal
-		String contract_renewal_retrieved = root4.findElement(By.cssSelector("span#subscriptionRenewal")).getText();
+		String contract_renewal_retrieved = shadow_root.findElement(By.cssSelector("span#subscriptionRenewal")).getText();
 		
 		if(contract_renewal_retrieved.equals(contract_renewal))
 			assertTrue("The Contract Renewal must always be " + contract_renewal + " and in the Checkout page card is equal -> " + contract_renewal_retrieved, true);
@@ -175,7 +127,7 @@ public class ProductPage extends DriverManager
 			fail("The Contract Renewal must always be " + contract_renewal + " and in the Checkout page card is equal -> " + contract_renewal_retrieved);
 		
 		//validation of the current date
-		String current_start_date_retrieved = root4.findElement(By.cssSelector("span#subscriptionStartDate")).getText();
+		String current_start_date_retrieved = shadow_root.findElement(By.cssSelector("span#subscriptionStartDate")).getText();
         ZonedDateTime thailandDateTime = ZonedDateTime.now(ZoneId.of("Asia/Bangkok"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy", Locale.ENGLISH);
         String thailand_current_date = thailandDateTime.format(formatter);
