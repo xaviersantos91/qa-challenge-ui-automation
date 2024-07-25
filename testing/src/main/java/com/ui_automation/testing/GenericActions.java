@@ -18,6 +18,7 @@ public class GenericActions {
 
     public static void CloseCookies(WebDriver driver)
 	{
+    	CommonActions.WaitForElementVisible(driver, btn_cookie_close);
     	CommonActions.WaitForElementToDisappear(driver, btn_cookie_popup_animation);
 		CommonActions.WaitForElementVisible(driver, btn_cookie_close);
 		CommonActions.ClickElement(driver, btn_cookie_close);

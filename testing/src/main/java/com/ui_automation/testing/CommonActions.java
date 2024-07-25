@@ -35,14 +35,18 @@ public class CommonActions {
 	public static void WaitForElementToDisappear(WebDriver driver, By locator) 
 	{
 		WebElement element = driver.findElement(locator);
-		try {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	    wait.until(
+                ExpectedConditions.invisibilityOfElementLocated(locator)
+            );
+		/*try {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		    wait.until(
 	                ExpectedConditions.invisibilityOfElementLocated(locator)
 	            );
 		}catch (Exception e) {
 			assertTrue("Element should not be visible anymore", !element.isDisplayed());
-		}		 
+		}*/		 
 	}
 
 	public static void ScrollToElement(WebDriver driver, By locator) 
