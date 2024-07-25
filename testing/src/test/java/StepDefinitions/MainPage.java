@@ -1,6 +1,5 @@
 package StepDefinitions;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -9,10 +8,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -20,19 +17,13 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
 
 
 public class MainPage extends DriverManager
 {
-	
-    // Locators
-    private static By devide_price = By.xpath("//edi-device-protection-form");
-    private static By devide_price_form = By.xpath("//form[@id='DeviceProtectionForm']");
     public static List<WebElement> dropdown_options ;
     public static WebElement dropdown;
-    public static WebDriverWait wait;
+    public static WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     private static String value_selected;
     
     public MainPage()
@@ -60,7 +51,6 @@ public class MainPage extends DriverManager
 	@Given("I wait for the price picker to show up")
 	public static void isPriceDropDownVisible() {
 		
-		wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-device-protection-form"))));
         
 		WebElement root1 = driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-device-protection-form"));
@@ -95,7 +85,7 @@ public class MainPage extends DriverManager
 	public static void PickRandomPrice() {
 		
 			dropdown.click();
-			wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
 		 	wait.until(ExpectedConditions.visibilityOf(dropdown.getShadowRoot().findElement(By.cssSelector("fieldset > div.form-group > div > div.form-list-wrapper > ul#list"))));
 		    
 		    dropdown_options = dropdown.getShadowRoot().findElements(By.cssSelector("fieldset > div.form-group > div > div.form-list-wrapper > ul#list > li"));
@@ -126,7 +116,7 @@ public class MainPage extends DriverManager
 		float number_converted = Float.valueOf(number.replace(",", ".").toString());
 				
 		dropdown.click();
-		wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		
 	 	wait.until(ExpectedConditions.visibilityOf(dropdown.getShadowRoot().findElement(By.cssSelector("fieldset > div.form-group > div > div.form-list-wrapper > ul#list"))));
 	    
 	    dropdown_options = dropdown.getShadowRoot().findElements(By.cssSelector("fieldset > div.form-group > div > div.form-list-wrapper > ul#list > li"));
@@ -164,7 +154,7 @@ public class MainPage extends DriverManager
 	
 	@And("I validate the choice selected is visible in the dropdown")
 	public static void ValidateValuePickedIsDisplayedCorrectly() {
-		wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		
 		wait.until(ExpectedConditions.visibilityOf(dropdown.getShadowRoot().findElement(By.cssSelector("fieldset > div.form-group > span#selected"))));
 		String dropdown_text = dropdown.getShadowRoot().findElement(By.cssSelector("fieldset > div.form-group > span#selected")).getText();
 		
@@ -174,5 +164,35 @@ public class MainPage extends DriverManager
 			fail("O valor escolhido -> " + value_selected + " deve ser igual ao valor presente -> " + dropdown_text);
 				
 	}
+	
+	@Then("I select the product")
+	public static void SelectProduct() {
 		
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-card-slider"))));
+        
+		WebElement root1 = driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-card-slider"));
+		
+		wait.until(ExpectedConditions.visibilityOf(root1)).getShadowRoot();
+        
+		WebElement root2 = root1.findElement(By.tagName("edi-card-vertical"));
+		
+		wait.until(ExpectedConditions.visibilityOf(root2)).getShadowRoot();
+        
+		WebElement root3 = root2.getShadowRoot().findElement(By.cssSelector("div.edi-card-vertical-url > edi-card#card"));
+		
+		wait.until(ExpectedConditions.visibilityOf(root3)).getShadowRoot();
+        
+		WebElement root4 = root3.findElement(By.tagName("edi-card-vertical-content")); 
+		
+		wait.until(ExpectedConditions.visibilityOf(root4)).getShadowRoot();
+        
+		WebElement root5 = root4.getShadowRoot().findElement(By.cssSelector("div > edi-cta"));
+		
+		wait.until(ExpectedConditions.visibilityOf(root5)).getShadowRoot();
+        
+		WebElement root6 = root5.getShadowRoot().findElement(By.cssSelector("div > a"));
+		
+		root6.click();
+		
+	}
 }
