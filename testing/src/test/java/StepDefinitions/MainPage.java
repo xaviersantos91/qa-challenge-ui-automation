@@ -25,6 +25,9 @@ public class MainPage extends DriverManager
     public static WebElement dropdown;
     public static WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     private static String value_selected;
+    public static String utm_source;
+    public static String current_price_saved;
+    public static String product_name_saved;
     
     public MainPage()
 	{
@@ -72,6 +75,7 @@ public class MainPage extends DriverManager
 			    
 	    root4.click();
 	    */
+						
 	    if(dropdown.isDisplayed())
 	    	assertTrue("Drop-down list of price ranges must be visible - The drop-down is visible", true);
 	    else
@@ -194,5 +198,53 @@ public class MainPage extends DriverManager
 		
 		root6.click();
 		
+	}
+	
+	@And("I capture the values in this page that will be used in future validations")
+	public static void CaptureUtmSource() {
+		String url = driver.getCurrentUrl();
+        String[] parts = url.split("\\?");
+
+        for (String part : parts) {
+            if(part.contains("utm_source")) {
+            	utm_source = part;
+                break;
+            }
+        }
+        
+        //product name
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-card-slider"))));
+        
+		WebElement root1 = driver.findElement(By.cssSelector("#\\37 5715 > edi-section > edi-card-slider"));
+		
+		wait.until(ExpectedConditions.visibilityOf(root1)).getShadowRoot();
+        
+		WebElement root2 = root1.findElement(By.tagName("edi-card-vertical"));
+		
+		wait.until(ExpectedConditions.visibilityOf(root2)).getShadowRoot();
+        
+		WebElement root3 = root2.getShadowRoot().findElement(By.cssSelector("div.edi-card-vertical-url > edi-card#card"));
+		
+		wait.until(ExpectedConditions.visibilityOf(root3)).getShadowRoot();
+        
+		WebElement root4 = root3.findElement(By.tagName("edi-card-vertical-content")); 		
+		
+		wait.until(ExpectedConditions.visibilityOf(root4)).getShadowRoot();
+        
+		WebElement product_name_element = root4.getShadowRoot().findElement(By.cssSelector("div > header > div > p.card-title"));
+		
+		product_name_saved = product_name_element.getText();
+		
+		//current price
+		WebElement root5 = root4.getShadowRoot().findElement(By.cssSelector("div > div.price-container > h3.edi-card-vertical__price > edi-counter"));
+		
+		wait.until(ExpectedConditions.visibilityOf(root5)).getShadowRoot();
+		
+		WebElement current_price_element_1 = root5.getShadowRoot().findElement(By.cssSelector("span#counter > span.counter-val"));
+		WebElement current_price_element_2 = root5.findElement(By.cssSelector("span[slot='post-counter']"));
+		
+		current_price_saved = current_price_element_1.getText()+current_price_element_2.getText();
+		int a = 0;
+        
 	}
 }
