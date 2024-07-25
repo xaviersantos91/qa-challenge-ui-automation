@@ -1,9 +1,11 @@
-package com.ui_automation.testing;
+package StepDefinitions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class GenericActions {
-    private WebDriver driver;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+
+public class GenericActions extends DriverManager{
 
     // Locators
     private static By btn_cookie_close = By.xpath("//div[contains(@id,'close')]");
@@ -13,10 +15,11 @@ public class GenericActions {
   
     // Constructor
     public GenericActions(WebDriver driver) {
-        this.driver = driver;
+        
     }
 
-    public static void CloseCookies(WebDriver driver)
+    @And("I close the cookies")
+    public static void CloseCookies()
 	{
     	CommonActions.WaitForElementVisible(driver, btn_cookie_close);
     	CommonActions.WaitForElementToDisappear(driver, btn_cookie_popup_animation);

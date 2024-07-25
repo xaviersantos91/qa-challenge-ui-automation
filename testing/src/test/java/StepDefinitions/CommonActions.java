@@ -1,4 +1,4 @@
-package com.ui_automation.testing;
+package StepDefinitions;
 import static org.junit.Assert.assertTrue;
 
 import java.time.Duration;
@@ -10,9 +10,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class CommonActions {
-    private WebDriver driver;
-
+public class CommonActions extends DriverManager {
+    
     // Constructor
     public CommonActions(WebDriver driver) {
         this.driver = driver;
@@ -34,7 +33,7 @@ public class CommonActions {
 	
 	public static void WaitForElementToDisappear(WebDriver driver, By locator) 
 	{
-		WebElement element = driver.findElement(locator);
+		//WebElement element = driver.findElement(locator);
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 	    wait.until(
                 ExpectedConditions.invisibilityOfElementLocated(locator)
