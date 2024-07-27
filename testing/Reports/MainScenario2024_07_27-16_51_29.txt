@@ -1,0 +1,39 @@
+ | 2024_07_27-16_51_31 | PASSED - A driver foi corretamente iniciada | 
+ | 2024_07_27-16_51_35 | PASSED - A url 'https://www.bolttech.co.th/en/ascend/device-protection?utm_source=ascend' foi acedida | 
+ | 2024_07_27-16_51_35 | PASSED - Fechei as cookies com sucesso | 
+ | 2024_07_27-16_51_41 | PASSED - A dropdown está visivel | 
+ | 2024_07_27-16_51_41 | PASSED - Drop-down list of price ranges must be visible - The drop-down is visible | 
+ | 2024_07_27-16_51_41 | PASSED - Foi capturado o utm_source utm_source=ascend | 
+ | 2024_07_27-16_51_41 | PASSED - O dropdown de preços foi clicado | 
+ | 2024_07_27-16_51_41 | PASSED - As opções de preço do dropdown estão visiveis | 
+ | 2024_07_27-16_51_41 | PASSED - A opção de preço pretendida está visiveis -> THB 15,001 - 22,000 | 
+ | 2024_07_27-16_51_41 | PASSED - Foi escolhida a opção THB 15,001 - 22,000 | 
+ | 2024_07_27-16_51_41 | PASSED - Clicamos no dropdown de preço | 
+ | 2024_07_27-16_51_41 | PASSED - As opções estão visiveis | 
+ | 2024_07_27-16_51_41 | PASSED - Foi escolhida a opção THB 6,001 - 10,000 | 
+ | 2024_07_27-16_51_41 | PASSED - O valor escolhido -> THB 6,001 - 10,000 deve ser igual ao valor presente -> THB 6,001 - 10,000 | 
+ | 2024_07_27-16_51_42 | PASSED - Foi esperado que o valor monetário da opção selecionada pare a animação que o altera até chegar ao valor final | 
+ | 2024_07_27-16_51_43 | PASSED - O botão Select está clicável depois de se ter feito a escolha do preço no dropdown | 
+ | 2024_07_27-16_51_51 | PASSED - O botão de selecionar produto foi clicado | 
+ | 2024_07_27-16_51_51 | PASSED - O nome do produto está visivel | 
+ | 2024_07_27-16_51_51 | PASSED - O preço do produto está visivel | 
+ | 2024_07_27-16_51_51 | PASSED - The current price in the previous page was ฿59.00 and in the Checkout page card is equal -> ฿59.00 | 
+ | 2024_07_27-16_51_51 | PASSED - The product name in the previous page was Screen Breakage and in the Checkout page Card Title is equal -> Screen Breakage | 
+ | 2024_07_27-16_51_51 | PASSED - The Provider name must always be bolttech and in the Checkout page card is equal -> bolttech | 
+ | 2024_07_27-16_51_51 | PASSED - The Contract Renewal must always be Monthly and in the Checkout page card is equal -> Monthly | 
+ | 2024_07_27-16_51_51 | PASSED - The Current date must be in Thailand Timezone and so like this -> Sat, 27 Jul 2024 and the Current date in the Checkout page card is -> Sat, 27 Jul 2024 | 
+ | 2024_07_27-16_51_51 | PASSED - imei tem 15 caracteres como deve ser | 
+ | 2024_07_27-16_51_51 | PASSED - imei tem apenas numeros conforme deve ser | 
+ | 2024_07_27-16_51_51 | PASSED - O numero arredondado menos a soma deve ser igual ao ultimo digito do imei -> 60 - 52 = 8 | 
+ | 2024_07_27-16_51_51 | PASSED - Foi inserido no campo input do IMEI o valor -> 490154203237518 | 
+ | 2024_07_27-16_51_51 | PASSED - Foi feito scroll até ao campo de input da marca | 
+ | 2024_07_27-16_51_51 | PASSED - Foi inserido no campo input do Device Name o valor -> Nokia | 
+ | 2024_07_27-16_51_51 | PASSED - Foi feito scroll até ao campo de input do modelo | 
+ | 2024_07_27-16_51_51 | PASSED - Foi inserido no campo input do Device Model o valor -> 3110 | 
+ | 2024_07_27-16_51_52 | PASSED - Foi feito scroll até a 1ª pergunta do questionário | 
+ | 2024_07_27-16_51_52 | PASSED - Foi escolhida a opção Yes para a 1ª pergunta | 
+ | 2024_07_27-16_51_52 | PASSED - Foi feito scroll até a 1ª pergunta do questionário | 
+ | 2024_07_27-16_51_52 | PASSED - Foi escolhida a opção No para a 2ª pergunta | 
+ | 2024_07_27-16_51_52 | PASSED - Foi feito scroll até a 1ª pergunta do questionário | 
+ | 2024_07_27-16_51_52 | PASSED - Foi escolhida a opção Yes para a 1ª pergunta | 
+ | 2024_07_27-16_51_53 | PASSED - Foi encerrada a driver e o browser | 

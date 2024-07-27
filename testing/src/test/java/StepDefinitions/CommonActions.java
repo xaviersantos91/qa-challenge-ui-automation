@@ -3,6 +3,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -23,9 +25,14 @@ public class CommonActions extends DriverManager {
         this.driver = driver;
     }
 
-    public static void ClickElement(WebDriver driver, By locator) 
+    public static void ClickElement(WebElement webelement, String msg_success, String msg_fail) 
 	{
-		driver.findElement(locator).click();
+    	try {
+    		webelement.click();
+    		Report.WriteToFile(filename, msg_success, true);
+    	}catch (Exception e) {
+    		Report.WriteToFile(filename, msg_fail, false);
+		}    	
 	}
 	
 	public static void WaitForElementVisible(WebDriver driver, By locator) 
@@ -151,18 +158,22 @@ public class CommonActions extends DriverManager {
 	
 	public static void ValidateImei(String imei) {
 		//validar que tem 15 numeros
-	    if (imei.length() != 15)
+	    if (imei.length() != 15) {
+	    	Report.WriteToFile(Report.filename, "imei tem menos de 15 caracteres logo é falso", false);
 	        fail("imei muito pequeno, logo falso");
-	    else
+	    }else {
 	    	assertTrue("imei tem 15 digitos conforme deve ser", true);
-
+	    	Report.WriteToFile(Report.filename, "imei tem 15 caracteres como deve ser", true);
+	    }
 	    //validar que não tem letras  
         boolean isNumeric = imei.matches("\\d+");
-        if(isNumeric)
+        if(isNumeric) {
         	assertTrue("imei tem apenas numeros conforme deve ser", true);
-        else
+        	Report.WriteToFile(Report.filename, "imei tem apenas numeros conforme deve ser", true);
+        }else {
+        	Report.WriteToFile(Report.filename, "imei não pode conter letras, logo falso", false);
         	fail("imei não pode conter letras, logo falso");
-        
+        }
 	    //guardar o ultimo numero
 	    int last_number = imei.charAt(14) - 48;
 
@@ -188,11 +199,13 @@ public class CommonActions extends DriverManager {
 	    //arredondar para multimo de 10 mais proximo
 	    int round = sum % 10 == 0 ? sum : ((sum / 10 + 1) * 10);
 	    
-	    if(round - sum == last_number)
+	    if(round - sum == last_number) {
 	    	assertTrue("O numero arredondado menos a soma deve ser igual ao ultimo digito do imei -> " + round + " - " + sum + " = " + last_number, true);
-	    else
+	    	Report.WriteToFile(Report.filename, "O numero arredondado menos a soma deve ser igual ao ultimo digito do imei -> " + round + " - " + sum + " = " + last_number, true);
+	    }else {
+	    	Report.WriteToFile(Report.filename, "O numero arredondado menos a soma deve ser igual ao ultimo digito do imei -> " + round + " - " + sum + " = " + last_number, false);
 	    	fail("O numero arredondado menos a soma deve ser igual ao ultimo digito do imei -> " + round + " - " + sum + " = " + last_number);
-		
+	    }
 	}
 	
 	public static WebElement ShadowRootToTheForm() {
@@ -228,9 +241,16 @@ public class CommonActions extends DriverManager {
 		WebElement input_imei = shadow_host_2.getShadowRoot().findElement(By.cssSelector("fieldset > input#imei"));
 						 
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", input_imei);
-
-        input_imei.sendKeys(String.valueOf(imei));
-		
+        
+        try
+		{
+        	input_imei.sendKeys(String.valueOf(imei));
+      		Report.WriteToFile(Report.filename, "Foi inserido no campo input do IMEI o valor -> " + String.valueOf(imei) , true);
+		} catch (Exception e)
+		{
+			Report.WriteToFile(Report.filename, "Erro ao inserir no campo input do IMEI o valor -> " + String.valueOf(imei) , false);
+		}
+      
 	}
 	
 	public static void FillInDeviceNameAndModel(String device_name, String device_model) {
@@ -245,12 +265,19 @@ public class CommonActions extends DriverManager {
 		WebElement input_device_brand = root1.getShadowRoot().findElement(By.cssSelector("fieldset > input#device\\[make\\]"));
 		
 		wait.until(ExpectedConditions.visibilityOf(input_device_brand));
-		 
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", input_device_brand);
-
-        input_device_brand.sendKeys(String.valueOf(device_name));
-        
-      //device model input
+		
+		try
+		{
+			 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", input_device_brand);
+			 Report.WriteToFile(Report.filename, "Foi feito scroll até ao campo de input da marca", true);
+			 input_device_brand.sendKeys(String.valueOf(device_name));
+		     Report.WriteToFile(Report.filename, "Foi inserido no campo input do Device Name o valor -> " + String.valueOf(device_name) , true);
+		}  catch (Exception e)
+		{
+			Report.WriteToFile(Report.filename, "Erro ao inserir no campo input do Device Name o valor -> " + String.valueOf(device_name) , false);
+		}
+       
+		//device model input
         root1 = shadow_root_form.getShadowRoot().findElement(By.cssSelector("fieldset > div > div > div:nth-child(4) > edi-input"));
 		
 		wait.until(ExpectedConditions.visibilityOf(root1)).getShadowRoot();
@@ -259,90 +286,89 @@ public class CommonActions extends DriverManager {
 		
 		wait.until(ExpectedConditions.visibilityOf(input_device_model));
 		 
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", input_device_model);
-
-        input_device_model.sendKeys(String.valueOf(device_model));        
-		
+		try
+		{
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", input_device_model);
+			 Report.WriteToFile(Report.filename, "Foi feito scroll até ao campo de input do modelo", true);
+			 input_device_model.sendKeys(String.valueOf(device_model));        
+		     Report.WriteToFile(Report.filename, "Foi inserido no campo input do Device Model o valor -> " + String.valueOf(device_model) , true);
+		}  catch (Exception e)
+		{
+			Report.WriteToFile(Report.filename, "Erro ao inserir no campo input do Device Model o valor -> " + String.valueOf(device_model) , false);
+		}
+				
 	}
 	
-public static void FillInAnswersToTheQuestionaire(String first_answer, String second_answer, String third_answer) {
-		
-		WebElement shadow_root_form = ShadowRootToTheForm();
-		
-		//first question - answer
-		WebElement shadow_host_first_question = shadow_root_form.getShadowRoot().findElement(By.cssSelector("fieldset > div > div > edi-radio-button#noDamage"));
-		
-		wait.until(ExpectedConditions.visibilityOf(shadow_host_first_question)).getShadowRoot();
-		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", shadow_host_first_question);
+	public static void AnswerQuestionaire(WebElement shadow_host_first_question, String answer) {
+		try {
+  			wait.until(ExpectedConditions.visibilityOf(shadow_host_first_question)).getShadowRoot();
+  			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", shadow_host_first_question);
+  			Report.WriteToFile(Report.filename, "Foi feito scroll até a 1ª pergunta do questionário", true);
+  		}catch (Exception e) {
+  			Report.WriteToFile(Report.filename, "Erro ao fazer scroll até a 1ª pergunta do questionário", false);
+		}
 		
 		WebElement first_question_yes = shadow_host_first_question.getShadowRoot().findElement(By.cssSelector("fieldset > div > button#button-Y"));
 		WebElement first_question_no = shadow_host_first_question.getShadowRoot().findElement(By.cssSelector("fieldset > div > button#button-N"));
 				 
-        switch (first_answer)
+        switch (answer)
 		{
 		case "Yes":
 			first_question_yes.click();
+			Report.WriteToFile(Report.filename, "Foi escolhida a opção Yes para a 1ª pergunta", true);
 			System.out.println("1 - Yes");
 			break;
 		case "No":
 			first_question_no.click();
+			Report.WriteToFile(Report.filename, "Foi escolhida a opção No para a 2ª pergunta", true);
 			System.out.println("1 - No");
 			break;
 		default:
 			first_question_yes.click();
+			Report.WriteToFile(Report.filename, "Foi escolhida a opção Yes para a 3ª pergunta", true);
+			System.out.println("1 - Yes");
 			break;
 		}
-        
-        //second question - answer
-  		WebElement shadow_host_second_question = shadow_root_form.getShadowRoot().findElement(By.cssSelector("fieldset > div > div > edi-radio-button#lessThan14Days"));
-  		
-  		wait.until(ExpectedConditions.visibilityOf(shadow_host_second_question)).getShadowRoot();
-  		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", shadow_host_second_question);
-  		
-  		WebElement second_question_yes = shadow_host_second_question.getShadowRoot().findElement(By.cssSelector("fieldset > div > #button-Y"));
-  		WebElement second_question_no = shadow_host_second_question.getShadowRoot().findElement(By.cssSelector("fieldset > div > #button-N"));
-  				 
-        
-        switch (second_answer)
-		{
-		case "Yes":
-			second_question_yes.click();
-			System.out.println("2 - Yes");
-			break;
-		case "No":
-			second_question_no.click();
-			System.out.println("2 - No");
-			break;
-		default:
-			second_question_yes.click();
-			break;
-		}
-        
-        if(third_answer != "null" && second_answer.equals("No")) {
-        	//second question - answer
-      		WebElement shadow_host_third_question = shadow_root_form.getShadowRoot().findElement(By.cssSelector("fieldset > div > div > edi-radio-button#lessThan18Months"));
-      		
-      		wait.until(ExpectedConditions.visibilityOf(shadow_host_third_question)).getShadowRoot();
-      		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", shadow_host_third_question);
-      		
-      		WebElement third_question_yes = shadow_host_third_question.getShadowRoot().findElement(By.cssSelector("fieldset > div > #button-Y"));
-      		WebElement third_question_no = shadow_host_third_question.getShadowRoot().findElement(By.cssSelector("fieldset > div > #button-N"));
-            
-            switch (third_answer)
-    		{
-    		case "Yes":
-    			third_question_yes.click();
-    			System.out.println("3 - Yes");
-    			break;
-    		case "No":
-    			third_question_no.click();
-    			System.out.println("3 - No");
-    			break;
-    		default:
-    			third_question_yes.click();
-    			break;
-    		}
+	}
+	
+	public static void FillInAnswersToTheQuestionaire(String first_answer, String second_answer, String third_answer) {
+		
+		WebElement shadow_root_form = ShadowRootToTheForm();
+		//first question - answer
+		WebElement shadow_host_first_question = shadow_root_form.getShadowRoot().findElement(By.cssSelector("fieldset > div > div > edi-radio-button#noDamage"));
+		WebElement shadow_host_second_question = shadow_root_form.getShadowRoot().findElement(By.cssSelector("fieldset > div > div > edi-radio-button#lessThan14Days"));
+		
+		Map<Integer, String> mapa_opcoes = new HashMap<>();
+
+        // Add three strings to the list
+		mapa_opcoes.put(1, first_answer);
+		mapa_opcoes.put(2, second_answer);
+		mapa_opcoes.put(3, third_answer);
+		
+		// Iterate through the HashMap using a foreach loop
+        for (Map.Entry<Integer, String> entry : mapa_opcoes.entrySet()) {
+        	Integer key = entry.getKey();
+            String value = entry.getValue();
+
+            // Use a switch statement based on the key
+            switch (key) {
+                case 1:
+                	AnswerQuestionaire(shadow_host_first_question, value);
+                    break;
+                case 2:
+                	AnswerQuestionaire(shadow_host_second_question, value);
+                    break;
+                case 3:
+                	if(!value.equals("null")) {
+                		WebElement shadow_host_third_question = shadow_root_form.getShadowRoot().findElement(By.cssSelector("fieldset > div > div > edi-radio-button#lessThan18Months"));
+                		AnswerQuestionaire(shadow_host_third_question, value);
+                	}
+            		break;
+                default:
+                    
+                    break;
+            }
         }
-    
+            
 	}
 }

@@ -1,7 +1,7 @@
 @all
 Feature: Pick Random Purchase Price
 
-  @tag1
+  @TestScenario1
   Scenario: Pick random purchase price
   	Given I start the Driver for <browser_name> browser
   	And I access the <url>
@@ -15,7 +15,7 @@ Feature: Pick Random Purchase Price
        | url																																				| browser_name |
        | "https://www.bolttech.co.th/en/ascend/device-protection?utm_source=ascend" | "Edge"			 |
       
-  @tag2
+  @TestScenario2
   Scenario Outline: Pick given purchase price
   	Given I start the Driver for <browser_name> browser
   	And I access the <url>
@@ -30,7 +30,7 @@ Feature: Pick Random Purchase Price
       | "https://www.bolttech.co.th/en/ascend/device-protection?utm_source=ascend" | "Edge"			  |   "3,000" |
       
    
-  @tag3
+  @TestScenario3
   Scenario: Pick random purchase price and proceed to select product and validate url components and validations on the first section of the Checkout page
   	Given I start the Driver for <browser_name> browser
   	And I access the <url>
@@ -51,7 +51,7 @@ Feature: Pick Random Purchase Price
        | "https://www.bolttech.co.th/en/ascend/device-protection?utm_source=ascend" | "Edge"			 | "/device-protection/checkout/payment" | "bolttech" | "Monthly"				 |
        
        
- @tag4
+ @MainScenario
   Scenario: All cases
   	Given I start the Driver for <browser_name> browser
   	And I access the <url>

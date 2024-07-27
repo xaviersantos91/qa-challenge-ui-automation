@@ -23,7 +23,7 @@ public class GenericActions extends DriverManager{
     	CommonActions.WaitForElementVisible(driver, btn_cookie_close);
     	CommonActions.WaitForElementToDisappear(driver, btn_cookie_popup_animation);
 		CommonActions.WaitForElementVisible(driver, btn_cookie_close);
-		CommonActions.ClickElement(driver, btn_cookie_close);
+		CommonActions.ClickElement(driver.findElement(btn_cookie_close), "Fechei as cookies com sucesso","Nao fechei as cookies");
 		CommonActions.WaitForElementToDisappear(driver, btn_cookie_popup);
 	}
 }

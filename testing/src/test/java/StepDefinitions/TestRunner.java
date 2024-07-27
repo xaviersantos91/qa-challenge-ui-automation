@@ -10,7 +10,7 @@ import io.cucumber.junit.CucumberOptions;
 @CucumberOptions(
 		features="src/test/resources/Features", 
 		glue={"StepDefinitions"},
-		tags="@tag4")
+		tags="@MainScenario")
 public class TestRunner{
 	
 	 @Before
