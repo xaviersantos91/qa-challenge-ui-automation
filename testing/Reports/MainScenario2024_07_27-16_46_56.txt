@@ -1,0 +1,18 @@
+ | 2024_07_27-16_46_58 | PASSED - A driver foi corretamente iniciada | 
+ | 2024_07_27-16_47_02 | PASSED - A url 'https://www.bolttech.co.th/en/ascend/device-protection?utm_source=ascend' foi acedida | 
+ | 2024_07_27-16_47_02 | PASSED - Fechei as cookies com sucesso | 
+ | 2024_07_27-16_47_08 | PASSED - A dropdown está visivel | 
+ | 2024_07_27-16_47_08 | PASSED - Drop-down list of price ranges must be visible - The drop-down is visible | 
+ | 2024_07_27-16_47_08 | PASSED - Foi capturado o utm_source utm_source=ascend | 
+ | 2024_07_27-16_47_08 | PASSED - O dropdown de preços foi clicado | 
+ | 2024_07_27-16_47_08 | PASSED - As opções de preço do dropdown estão visiveis | 
+ | 2024_07_27-16_47_08 | PASSED - A opção de preço pretendida está visiveis -> THB 6,001 - 10,000 | 
+ | 2024_07_27-16_47_08 | PASSED - Foi escolhida a opção THB 6,001 - 10,000 | 
+ | 2024_07_27-16_47_08 | PASSED - Clicamos no dropdown de preço | 
+ | 2024_07_27-16_47_08 | PASSED - As opções estão visiveis | 
+ | 2024_07_27-16_47_08 | PASSED - Foi escolhida a opção THB 6,001 - 10,000 | 
+ | 2024_07_27-16_47_08 | PASSED - O valor escolhido -> THB 6,001 - 10,000 deve ser igual ao valor presente -> THB 6,001 - 10,000 | 
+ | 2024_07_27-16_47_09 | PASSED - Foi esperado que o valor monetário da opção selecionada pare a animação que o altera até chegar ao valor final | 
+ | 2024_07_27-16_47_09 | PASSED - O botão Select está clicável depois de se ter feito a escolha do preço no dropdown | 
+ | 2024_07_27-16_47_10 | FAILED - O botão de selecionar produto não foi clicado | 
+ | 2024_07_27-16_47_10 |  - END - | 
