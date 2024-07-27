@@ -10,6 +10,7 @@ import java.util.Random;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -23,11 +24,12 @@ public class MainPage extends DriverManager
 {
     public static List<WebElement> dropdown_options ;
     public static WebElement dropdown;
-    public static WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    public static WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     private static String value_selected;
     public static String utm_source;
     public static String current_price_saved;
     public static String product_name_saved;
+    public static String dropdown_text_default, dropdown_text_selected;
     
     public MainPage()
 	{
@@ -54,18 +56,45 @@ public class MainPage extends DriverManager
 	@Given("I wait for the price picker to show up")
 	public static void isPriceDropDownVisible() {
 		
-		dropdown = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_dropdown");		
-						
+		String url = driver.getCurrentUrl();
+        String[] parts = url.split("\\?");
+
+        for (String part : parts) {
+            if(part.contains("utm_source")) {
+            	utm_source = part;
+                break;
+            }
+        }
+        
+		dropdown = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_dropdown");	
+		
+		wait.until(ExpectedConditions.visibilityOf(dropdown.getShadowRoot().findElement(By.cssSelector("fieldset > div.form-group > span#selected"))));
+		dropdown_text_default = dropdown.getShadowRoot().findElement(By.cssSelector("fieldset > div.form-group > span#selected")).getText();
+								
 	    if(dropdown.isDisplayed())
 	    	assertTrue("Drop-down list of price ranges must be visible - The drop-down is visible", true);
 	    else
 	    	fail("Drop-down list of price ranges must be visible - The drop-down is NOT visible");
 	}
 	
+	@And("I capture the utm_source")
+	public static void CaptureUtmSource() {
+		
+		String url = driver.getCurrentUrl();
+        String[] parts = url.split("\\?");
+
+        for (String part : parts) {
+            if(part.contains("utm_source")) {
+            	utm_source = part;
+                break;
+            }
+        }
+	}
+	
 	
 	@When("The price picker shows I choose a random value from it")
 	public static void PickRandomPrice() {
-		
+			
 			dropdown.click();
 
 		 	wait.until(ExpectedConditions.visibilityOf(dropdown.getShadowRoot().findElement(By.cssSelector("fieldset > div.form-group > div > div.form-list-wrapper > ul#list"))));
@@ -75,19 +104,11 @@ public class MainPage extends DriverManager
 		    
 		    Random rand = new Random();
 		    int randomNumber = rand.nextInt((dropdown_options.size()));
-		    System.out.println(randomNumber);
 		    wait.until(ExpectedConditions.visibilityOf(dropdown_options.get(randomNumber)));
-		    
 		    value_selected = dropdown_options.get(randomNumber).getText();
 		    
-		    WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_future_validations");
-		    WebElement root5 = shadow_root.getShadowRoot().findElement(By.cssSelector("div > edi-cta[disabled='false']"));
-		    
 		    dropdown_options.get(randomNumber).click();
-		    
-		    String loading = root5.getAttribute("disabled");
-		    if (loading.equals("true"))
-		    	wait.until(ExpectedConditions.visibilityOf(root5));
+		    		    
 	}
 	
 	@When("The price picker shows I choose a {string} from it")
@@ -114,13 +135,9 @@ public class MainPage extends DriverManager
 		    	break;
 			i++;
 		}
-	    WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_future_validations");
-	    WebElement root5 = shadow_root.getShadowRoot().findElement(By.cssSelector("div > edi-cta[disabled='false']"));
-	    dropdown_options.get(i).click();
 	    
-	    String loading = root5.getAttribute("disabled");
-	    if (loading.equals("true"))
-	    	wait.until(ExpectedConditions.visibilityOf(root5));
+	    dropdown_options.get(i).click();	
+	    	
 	}
 	
 	@Then("I close the browser and driver")
@@ -132,14 +149,16 @@ public class MainPage extends DriverManager
 	public static void ValidateValuePickedIsDisplayedCorrectly() {
 		
 		wait.until(ExpectedConditions.visibilityOf(dropdown.getShadowRoot().findElement(By.cssSelector("fieldset > div.form-group > span#selected"))));
-		String dropdown_text = dropdown.getShadowRoot().findElement(By.cssSelector("fieldset > div.form-group > span#selected")).getText();
+		WebElement dropdown_text = dropdown.getShadowRoot().findElement(By.cssSelector("fieldset > div.form-group > span#selected"));
+		wait.until(ExpectedConditions.textToBePresentInElement(dropdown_text, value_selected));
 		
-		if(value_selected.equals(dropdown_text))
-			assertTrue("O valor escolhido -> " + value_selected + " deve ser igual ao valor presente -> " + dropdown_text, true);
+		dropdown_text_selected = dropdown.getShadowRoot().findElement(By.cssSelector("fieldset > div.form-group > span#selected")).getText();
+		
+		if(value_selected.equals(dropdown_text_selected))
+			assertTrue("O valor escolhido -> " + value_selected + " deve ser igual ao valor presente -> " + dropdown_text_selected, true);
 		else
-			fail("O valor escolhido -> " + value_selected + " deve ser igual ao valor presente -> " + dropdown_text);
-	
-		
+			fail("O valor escolhido -> " + value_selected + " deve ser igual ao valor presente -> " + dropdown_text_selected);
+			
 	}
 	
 	@Then("I select the product")
@@ -151,31 +170,36 @@ public class MainPage extends DriverManager
 	}
 	
 	@And("I capture the values in this page that will be used in future validations")
-	public static void CaptureUtmSource() {
-		
-		String url = driver.getCurrentUrl();
-        String[] parts = url.split("\\?");
-
-        for (String part : parts) {
-            if(part.contains("utm_source")) {
-            	utm_source = part;
-                break;
-            }
-        }
-        
-        WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_future_validations");
+	public static void CaptureValuesToValidateInFuture() {
+				
+	    WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_future_validations");
+	    WebElement root = shadow_root.getShadowRoot().findElement(By.cssSelector("div > div.price-container > h3.edi-card-vertical__price > edi-counter"));
+		wait.until(ExpectedConditions.visibilityOf(root)).getShadowRoot();		
+		WebElement teste = root.getShadowRoot().findElement(By.cssSelector("span#counter"));
+		try {
+			if(wait.until(ExpectedConditions.attributeContains(teste, "class", "animating"))==true){
+				wait.until(ExpectedConditions.attributeToBe(teste, "class", "edi-counter__counter ascend"));
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+		};
+		        
+        shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("main_page_future_validations");
         
         //product name
 		WebElement product_name_element = shadow_root.getShadowRoot().findElement(By.cssSelector("div > header > div > p.card-title"));
 		product_name_saved = product_name_element.getText();
 		
 		//current price
-		WebElement root5 = shadow_root.getShadowRoot().findElement(By.cssSelector("div > div.price-container > h3.edi-card-vertical__price > edi-counter"));
-		wait.until(ExpectedConditions.visibilityOf(root5)).getShadowRoot();	
+		root = shadow_root.getShadowRoot().findElement(By.cssSelector("div > div.price-container > h3.edi-card-vertical__price > edi-counter"));
+		wait.until(ExpectedConditions.visibilityOf(root)).getShadowRoot();		
 				
-		WebElement current_price_element_1 = root5.getShadowRoot().findElement(By.cssSelector("span#counter > span.counter-val"));
-		WebElement current_price_element_2 = root5.findElement(By.cssSelector("span[slot='post-counter']"));
+		WebElement current_price_element_1 = root.getShadowRoot().findElement(By.cssSelector("span#counter > span.counter-val"));
+		WebElement current_price_element_2 = root.findElement(By.cssSelector("span[slot='post-counter']"));
 		current_price_saved = current_price_element_1.getText()+current_price_element_2.getText();
-		        
+		
+		//se o preço escolhido for igual ao preço default 
+		//if(dropdown_text_default.equals(dropdown_text_selected))
+	    //	return;
 	}
 }

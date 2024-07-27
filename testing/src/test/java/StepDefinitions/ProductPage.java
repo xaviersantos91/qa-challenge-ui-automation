@@ -7,13 +7,18 @@ import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Random;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -87,10 +92,15 @@ public class ProductPage extends DriverManager
 	
 	@Then("I validate that the current price and product name are in accordance with the ones shown on the previous page")
 	public static void ValidateCurrentPriceAndProductName() {
-		
+		wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 		WebElement shadow_root = CommonActions.RetrieveLastRootToAccessCardDetails("card_details");
+		WebElement product = shadow_root.findElement(By.cssSelector("div > p.title"));
+		wait.until(ExpectedConditions.textToBePresentInElement(product, MainPage.product_name_saved));
 		
 		String product_name = shadow_root.findElement(By.cssSelector("div > p.title")).getText();
+		WebElement price = shadow_root.findElement(By.cssSelector("div > div.price > div.final-price-wrapper > p.final-price"));
+		wait.until(ExpectedConditions.textToBePresentInElement(price, MainPage.current_price_saved));
+		
 		String current_price = shadow_root.findElement(By.cssSelector("div > div.price > div.final-price-wrapper > p.final-price")).getText();
 			
 		if(MainPage.current_price_saved.equals(current_price))
@@ -138,5 +148,25 @@ public class ProductPage extends DriverManager
 			fail("The Current date must be in Thailand Timezone and so like this -> " + thailand_current_date + " and the Current date in the Checkout page card is -> " + current_start_date_retrieved);
         
 	}
+	@Then ("I insert an {string} and validate if it is valid")
+	public static void InsertAndValidateIMEI(String imei) {
+		
+		CommonActions.ValidateImei(imei);
+	    CommonActions.FillInImei(imei);
+	    
+	}
 	
+	@And("I insert the {string} and {string}")
+	public static void InsertDeviceBrandAndModel(String device_brand, String device_model) {
+		
+		CommonActions.FillInDeviceNameAndModel(device_brand, device_model);
+	   	    
+	}
+	
+	 @And("I answer the questionnaire with the following {string} {string} {string}")
+	 public static void AnswerQuestionnaire(String first_answer, String second_answer, String third_answer) {
+		 
+		 CommonActions.FillInAnswersToTheQuestionaire(first_answer, second_answer ,third_answer);
+		 
+	 }
 }
